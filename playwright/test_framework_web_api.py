@@ -2,13 +2,15 @@ import json
 import pytest
 from playwright.sync_api import Playwright, expect
 from pageObjects.loginPage import LoginPage
-from utils.apiBase import APIUtils
+from utils.apiBaseFramework import APIUtils
 
 # User_credentials extraction from .json file
 with open("playwright/data/credentials.json") as f:
     test_data = json.load(f)
 user_credentials_list = test_data["user_credentials"]
 
+
+@pytest.mark.smoke
 @pytest.mark.parametrize('user_credentials', user_credentials_list)
 def test_e2e_web_api(playwright: Playwright, browser_name, user_credentials):
     # User Credentials
@@ -17,7 +19,7 @@ def test_e2e_web_api(playwright: Playwright, browser_name, user_credentials):
 
     # Create order via API
     api_Utils = APIUtils()
-    order_number = api_Utils.createOrder(playwright, user_credentials)
+    order_number = api_Utils.createOrder(playwright)
 
     # Login
     loginPage = LoginPage(browser_name)
@@ -28,4 +30,3 @@ def test_e2e_web_api(playwright: Playwright, browser_name, user_credentials):
     orderHistoryPage = dashBoardPage.selectOrdersNavigationLink()
     orderDetailsPage = orderHistoryPage.selectOrder(order_number)
     orderDetailsPage.verifyOrderMessage()
-

@@ -3,6 +3,9 @@ import pytest
 def pytest_addoption(parser):
     parser.addoption("--browser_name", action="store_true",
                      default="chrome", help="browser selection")
+    parser.addoption("--url_name", action="store_true",
+                     default="https://rahulshettyacademy.com/client",
+                     help="url selection")
 
 @pytest.fixture(scope="session")
 def user_credentials(request):
@@ -11,6 +14,7 @@ def user_credentials(request):
 @pytest.fixture
 def browserInstance(playwright, request):
     browser_name = request.config.getoption("browser_name")
+    url_name = request.config.getoption("url_name")
     if browser_name == "chrome":
         browser = playwright.chromium.launch()
     elif browser_name == "firefox":
@@ -18,6 +22,7 @@ def browserInstance(playwright, request):
 
     context = browser.new_context()
     page = context.new_page()
+    page.goto(url_name)
     yield page
     context.close()
     browser.close()
