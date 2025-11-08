@@ -12,17 +12,19 @@ user_credentials_list = test_data["user_credentials"]
 
 @pytest.mark.smoke
 @pytest.mark.parametrize('user_credentials', user_credentials_list)
-def test_e2e_web_api(playwright: Playwright, browser_name, user_credentials):
+def test_e2e_web_api(playwright: Playwright, browserInstance, user_credentials):
+    page = browserInstance
+
     # User Credentials
     user_email = user_credentials["user_email"]
     user_password = user_credentials["user_password"]
 
     # Create order via API
     api_Utils = APIUtils()
-    order_number = api_Utils.createOrder(playwright)
+    order_number = api_Utils.createOrder(playwright, user_credentials)
 
     # Login
-    loginPage = LoginPage(browser_name)
+    loginPage = LoginPage(page)
     loginPage.navigate()
 
     # Dashboard, Order history page
