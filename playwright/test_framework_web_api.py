@@ -12,8 +12,7 @@ user_credentials_list = test_data["user_credentials"]
 
 @pytest.mark.smoke
 @pytest.mark.parametrize('user_credentials', user_credentials_list)
-def test_e2e_web_api(playwright: Playwright, browserInstance, user_credentials):
-    page = browserInstance
+def test_e2e_web_api(playwright: Playwright, page, user_credentials):
 
     # User Credentials
     user_email = user_credentials["user_email"]

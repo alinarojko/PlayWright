@@ -12,6 +12,7 @@ class APIUtils:
         responce = api_request_context.post("api/ecom/auth/login",
                                             data={"userEmail": email, "userPassword": password})
         assert responce.ok
+
         print(responce.json())
         token = responce.json()["token"]
         return token

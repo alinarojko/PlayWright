@@ -7,7 +7,7 @@ class DashboardPage:
         self.page = page
 
     def selectOrdersNavigationLink(self):
-        self.page.get_by_role("button", name="ORDERS").click()
+        self.page.get_by_role("button", name="  ORDERS").click()
         return OrderHistoryPage(self.page)
 
 
