@@ -1,12 +1,14 @@
 import allure
 import pytest
 
+
 def pytest_addoption(parser):
     parser.addoption("--browser_name", action="store", default="chromium",
                      help="chromium|firefox|webkit")
     parser.addoption("--url_name", action="store",
                      default="https://rahulshettyacademy.com/client",
                      help="base url")
+
 
 @pytest.fixture
 def page(playwright, request):
@@ -27,7 +29,6 @@ def page(playwright, request):
     page.goto(url_name)
     yield page
 
-
     context.close()
     browser.close()
 
@@ -37,6 +38,7 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     setattr(item, "rep_" + rep.when, rep)
+
 
 @pytest.fixture(autouse=True)
 def attach_on_failure(request, page):
