@@ -5,7 +5,7 @@ from pageObjects.loginPage import LoginPage
 from utils.apiBaseFramework import APIUtils
 
 # User_credentials extraction from .json file
-with open("playwright/data/credentials.json") as f:
+with open("data/credentials.json") as f:
     test_data = json.load(f)
 user_credentials_list = test_data["user_credentials"]
 

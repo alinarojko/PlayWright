@@ -3,7 +3,10 @@ from pytest_bdd import given, when, then, parsers, scenarios
 from utils.apiBaseFramework import APIUtils
 from pageObjects.loginPage import LoginPage
 
-scenarios("../features/orderTransaction.feature")
+# Jenkins or terminal command example:
+# pytest  --browser_name chrome  --tracing on --html=report.html
+
+scenarios("features/orderTransaction.feature")
 @pytest.fixture
 def shared_data():
     return {}

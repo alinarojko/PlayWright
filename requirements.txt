@@ -1,0 +1,11 @@
+pytest-bdd
+pytest
+pytest-playwright
+pytest-html
+pytest-xdist
+playwright
+allure-pytest
+requests
+Pygments
+setuptools
+wheel
