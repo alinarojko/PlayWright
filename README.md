@@ -29,41 +29,9 @@ The framework supports:
 
 It is designed to demonstrate real automation engineering skills for interviews and portfolio projects.
 
-📁 Project Structure
-PlayWright/
-│
-├── conftest.py                     # Global fixtures: browser, tracing, video, Allure attachments
-├── pytest.ini                      # PyTest config (Allure dir + markers)
-├── requirements.txt                # Project dependencies
-│
-├── pageObjects/
-│   ├── loginPage.py
-│   ├── dashboardPage.py
-│   ├── orderHistoryPage.py
-│   └── orderDetailsPage.py
-│
-├── utils/
-│   ├── apiBaseFramework.py         # API utils (token + order creation)
-│   └── apiBase.py                  # Helper for session injection
-│
-├── playwright/
-│   └── data/
-│       └── credentials.json        # Credentials for parametrized tests
-│
-├── features/
-│   └── orderTransaction.feature    # BDD Gherkin scenario
-│
-├── tests/
-│   ├── test_Network1.py
-│   ├── test_Network2.py
-│   ├── test_framework_web_api.py
-│   ├── test_pytest_bddTest.py
-│   └── test_web_api.py
-│
-├── allure-results/                 # Generated automatically
-└── allure-report/                  # Generated automatically
 
 🧪 Testing Capabilities
+
 ✔ UI Testing (Playwright)
 
 Page navigation
@@ -77,11 +45,8 @@ Assertions
 Locator-based synchronization
 
 ✔ API Testing
-
 Implemented via:
-
 playwright.request.new_context()
-
 
 Capabilities:
 
@@ -94,12 +59,10 @@ Order creation before UI test
 Session injection into browser
 
 Used in:
-
 APIUtils.createOrder()
 APIUtils.getToken()
 
 ✔ Network Mocking
-
 Examples:
 
 Fake backend response
@@ -111,7 +74,6 @@ Redirected URL
 Interception of API calls
 
 Used in:
-
 test_Network1.py
 test_Network2.py
 
