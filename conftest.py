@@ -34,7 +34,7 @@ def page(playwright, request):
             allure.attach.file(
                 trace_path,
                 name="Playwright Trace",
-                attachment_type=allure.attachment_type.ZIP
+                attachment_type=allure.attachment_type.BINARY
             )
 
         # ---------------- VIDEO ----------------
