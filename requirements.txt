@@ -9,3 +9,4 @@ requests
 Pygments
 setuptools
 wheel
+pytest-rerunfailures
