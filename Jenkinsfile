@@ -1,36 +1,43 @@
 pipeline {
     agent any
 
-    environment {
-        PYTHON = "python"
-        VENV = ".venv"
-        ALLURE = "C:\\allure\\allure-2.30.0\\bin\\allure.bat"
+    options {
+        disableConcurrentBuilds()
+        timestamps()
     }
 
     stages {
 
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+                echo 'Workspace cleaned.'
+            }
+        }
+
         stage('Checkout from GitHub') {
             steps {
-                echo "Checking out the repository..."
+                echo 'Checking out the repository...'
                 checkout scm
             }
         }
 
         stage('Create virtual environment') {
             steps {
-                echo "Creating Python virtual environment..."
+                echo 'Creating Python virtual environment...'
                 bat """
-                    ${PYTHON} -m venv ${VENV}
+                    python -m venv .venv
                 """
             }
         }
 
-        stage('Install dependencies') {
+        stage('Upgrade pip & Install dependencies') {
             steps {
-                echo "Installing dependencies from requirements.txt..."
+                echo 'Upgrading pip and installing requirements...'
                 bat """
-                    call ${VENV}\\Scripts\\activate
-                    pip install --upgrade pip
+                    call .venv\\Scripts\\activate
+
+                    python -m pip install --upgrade pip
                     pip install -r requirements.txt
                 """
             }
@@ -38,9 +45,9 @@ pipeline {
 
         stage('Run PyTest with Allure') {
             steps {
-                echo "Running tests and generating allure-results..."
+                echo 'Running tests and generating allure-results...'
                 bat """
-                    call ${VENV}\\Scripts\\activate
+                    call .venv\\Scripts\\activate
                     pytest --alluredir=allure-results
                 """
             }
@@ -48,21 +55,33 @@ pipeline {
 
         stage('Generate Allure Report') {
             steps {
-                echo "Generating Allure report..."
+                echo 'Generating Allure report...'
                 bat """
-                    ${ALLURE} generate allure-results -c -o allure-report
+                    C:\\allure\\allure-2.30.0\\bin\\allure.bat generate allure-results -c -o allure-report
                 """
             }
         }
-
-    } // stages
+    }
 
     post {
+
         always {
-            echo "Publishing Allure result in Jenkins..."
+            echo 'Publishing Allure result in Jenkins...'
             allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
 
-            archiveArtifacts artifacts: 'allure-report/**', onlyIfSuccessful: false
+            archiveArtifacts artifacts: 'allure-report/**/*.*', fingerprint: true
+        }
+
+        success {
+            echo '🎉 BUILD SUCCESS: All tests passed.'
+        }
+
+        unstable {
+            echo '⚠️ BUILD UNSTABLE: Some warnings or skipped tests.'
+        }
+
+        failure {
+            echo '❌ BUILD FAILED: Tests or stages failed.'
         }
     }
 }
