@@ -2,6 +2,7 @@ import os
 import pytest
 import allure
 from datetime import datetime
+from allure_commons.types import AttachmentType
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
@@ -30,17 +31,19 @@ def page(playwright, request):
         # ---------------- TRACE ----------------
         trace_path = f"traces/{test_name}_{timestamp}.zip"
         context.tracing.stop(path=trace_path)
+
         if os.path.exists(trace_path):
             allure.attach.file(
                 trace_path,
                 name="Playwright Trace",
-                attachment_type=allure.attachment_type.BINARY
+                attachment_type=AttachmentType.TEXT   # universal safe type
             )
 
         # ---------------- VIDEO ----------------
         video = page.video
         if video:
             video_path = video.path()
+
             try:
                 page.close()
                 context.close()
@@ -51,7 +54,7 @@ def page(playwright, request):
                 allure.attach.file(
                     video_path,
                     name="Video",
-                    attachment_type=allure.attachment_type.MP4
+                    attachment_type=AttachmentType.TEXT   # safe fallback
                 )
 
         browser.close()
@@ -75,12 +78,12 @@ def attach_on_failure(request, page):
         allure.attach.file(
             screenshot_path,
             name="Failure Screenshot",
-            attachment_type=allure.attachment_type.PNG
+            attachment_type=AttachmentType.PNG
         )
 
         html = page.content()
         allure.attach(
             html,
             name="HTML Snapshot",
-            attachment_type=allure.attachment_type.HTML
+            attachment_type=AttachmentType.HTML
         )
